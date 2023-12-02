@@ -10,11 +10,15 @@ Run Nexus Container with SSL:
 Run the Nexus container, mounting your SSL certificate and private key:
 ```
 ```
-docker run -d -p 8081:8081 --name nexus --network nexus-network \
+docker run -d -p 8081:8081 --name nexus \
   -v /path/to/your_certificate.crt:/nexus-data/ssl/your_certificate.crt \
   -v /path/to/your_private_key.key:/nexus-data/ssl/your_private_key.key \
-  -e INSTALL4J_ADD_VM_PARAMS="-Djavax.net.ssl.keyStore=/nexus-data/ssl/your_certificate.crt -Djavax.net.ssl.keyStorePassword=changeit -Djavax.net.ssl.trustStore=/nexus-data/ssl/your_certificate.crt -Djavax.net.ssl.trustStorePassword=changeit" \
-  sonatype/nexus3
+  sonatype/nexus3 \
+  java -Djavax.net.ssl.keyStore=/nexus-data/ssl/your_certificate.crt \
+       -Djavax.net.ssl.keyStorePassword=changeit \
+       -Djavax.net.ssl.trustStore=/nexus-data/ssl/your_certificate.crt \
+       -Djavax.net.ssl.trustStorePassword=changeit \
+       -jar /opt/sonatype/nexus/nexus-3.x.y-xx/bin/nexus.jar
 ```
 > Replace /path/to/your_certificate.crt and /path/to/your_private_key.key with the actual paths to your certificate and private key files.
 
