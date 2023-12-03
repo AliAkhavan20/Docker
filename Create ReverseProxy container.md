@@ -70,40 +70,42 @@ cd /proxy/conf/
 ```
 ```
 nano nginx.conf
+```
+http {
+    server {
+        listen 80;
+        server_name repo.acctechco.com;
 
-server {
-    listen 80;
-    server_name repo.acctechco.com;
+        location / {
+            proxy_pass http://localhost:8081;  # Adjust the port as needed
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
 
-    location / {
-        proxy_pass http://localhost:8081;  # Adjust the port as needed
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
+        # Additional configurations (if needed)...
     }
 
-    # Additional configurations (if needed)...
-}
+    server {
+        listen 443 ssl;
+        server_name repo.acctechco.com;
 
-server {
-    listen 443 ssl;
-    server_name repo.acctechco.com;
+        ssl_certificate /path/to/your/certificate.crt;
+        ssl_certificate_key /path/to/your/private.key;
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+        ssl_ciphers HIGH:!aNULL:!MD5;
 
-    ssl_certificate /path/to/your/certificate.crt;
-    ssl_certificate_key /path/to/your/private.key;
-    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-    ssl_ciphers HIGH:!aNULL:!MD5;
+        location / {
+            proxy_pass http://localhost:8081;  # Adjust the port as needed
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
 
-    location / {
-        proxy_pass http://localhost:8081;  # Adjust the port as needed
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
+        # Additional SSL and proxy configurations...
     }
-
-    # Additional SSL and proxy configurations...
 }
 ```
 ### and at the end we call the docker-compose
