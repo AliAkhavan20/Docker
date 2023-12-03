@@ -84,7 +84,7 @@ http {
 
   server {
     listen 443 ssl;
-    server_name esales.mymarket.com.;
+    server_name esales.mymarket.com;
 
     ssl_certificate /etc/nginx/certs/esales.mymarket.com.crt;
     ssl_certificate_key /etc/nginx/certs/esales.mymarket.com.key;
