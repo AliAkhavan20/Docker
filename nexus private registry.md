@@ -1,4 +1,4 @@
-# Nexus Private Registry with no ssl
+# Nexus Private Registry with no ssl and ssl
 
 run your Nexus container securely over HTTPS, you can follow these steps. In this example, I'll assume you have a certificate file (your_certificate.crt) and a private key file (your_private_key.key). Also, replace your_domain.com with your actual domain.
 
