@@ -21,6 +21,10 @@ services:
     volumes:
     - ./host-nexus-data:/nexus-data
 ```
+### give permission to UID nexus user inside the container
+```
+sudo chown -R 200 nexus-data/
+```
 ### Run the script
 ```
 docker-compose up
