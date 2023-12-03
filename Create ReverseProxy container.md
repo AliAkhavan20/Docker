@@ -71,35 +71,39 @@ cd /proxy/conf/
 ```
 nano nginx.conf
 
-events {
-  worker_connections 1024;
+server {
+    listen 80;
+    server_name repo.acctechco.com;
+
+    location / {
+        proxy_pass http://localhost:8081;  # Adjust the port as needed
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Additional configurations (if needed)...
 }
 
-http {
-  server {
-    listen 80;
-    server_name esales.mymarket.com;
-    return 301 https://$host$request_uri;
-  }
-
-  server {
+server {
     listen 443 ssl;
-    server_name esales.mymarket.com;
+    server_name repo.acctechco.com;
 
-    ssl_certificate /etc/nginx/certs/esales.mymarket.com.crt;
-    ssl_certificate_key /etc/nginx/certs/esales.mymarket.com.key;
+    ssl_certificate /path/to/your/certificate.crt;
+    ssl_certificate_key /path/to/your/private.key;
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
     ssl_ciphers HIGH:!aNULL:!MD5;
 
     location / {
-      proxy_buffering off;
-      proxy_set_header X-Forwarded-Proto $scheme;
-      proxy_set_header X-Forwarded-Host $host;
-      proxy_set_header X-Forwarded-Port $server_port;
-
-      proxy_pass http://nopcom;
+        proxy_pass http://localhost:8081;  # Adjust the port as needed
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
     }
-  }
+
+    # Additional SSL and proxy configurations...
 }
 ```
 ### and at the end we call the docker-compose
