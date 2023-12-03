@@ -68,7 +68,6 @@ services:
 ```
 cd /proxy/conf/
 ```
-```
 nano nginx.conf
 ```
 http {
