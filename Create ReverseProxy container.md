@@ -78,13 +78,13 @@ events {
 http {
   server {
     listen 80;
-    server_name esales.sepahanbattery.com;
+    server_name esales.mymarket.com;
     return 301 https://$host$request_uri;
   }
 
   server {
     listen 443 ssl;
-    server_name esales.sepahanbattery.com.;
+    server_name esales.mymarket.com.;
 
     ssl_certificate /etc/nginx/certs/esales.mymarket.com.crt;
     ssl_certificate_key /etc/nginx/certs/esales.mymarket.com.key;
