@@ -110,6 +110,7 @@ http {
             proxy_buffer_size           128k;
             proxy_buffers               4 256k;
             proxy_busy_buffers_size     256k;
+            proxy_read_timeout          600s;   # adding this line is not nessasery,its based on your app behavior
         }
     }
 ```
