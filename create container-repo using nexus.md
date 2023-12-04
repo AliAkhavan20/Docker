@@ -1,6 +1,7 @@
 # Create a container-repository
 ## You need to add this into your revers-proxy config-file
 ## correlates to your nexus http connector
+```
 server {
     listen 6666;
     server_name box.company.net;
@@ -27,3 +28,4 @@ server {
 
     }
 }
+```
