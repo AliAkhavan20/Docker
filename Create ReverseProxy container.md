@@ -78,10 +78,6 @@ http {
     sendfile on;
     large_client_header_buffers 4 32k;
 
-    upstream web-api {
-        server api:5000;
-    }
-
     server {
         listen 80;
         server_name my-site;
