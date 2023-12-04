@@ -62,7 +62,7 @@ services:
        image: nopweb
     container_name: nopcom
     ports:
-      - "8082:80"
+      - "8081:8081"
 ```
 ### now Go to conf dir
 ```
