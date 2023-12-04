@@ -1,5 +1,11 @@
 # Create a container-repository
-## You need to add this into your revers-proxy config-file
+
+## First run a docker(hosted) repo in nexus admin page
+> in the repo config option you can choose whether config your registry with HTTP or HTTPS
+> it is recommanded to use http if you have a reverse-proxy in-front
+> Choose the right port for your repo
+
+## You need to add this into your reverse-proxy config-file
 ## correlates to your nexus http connector
 ```
 server {
@@ -29,3 +35,7 @@ server {
     }
 }
 ```
+### (optional) edit your nexus docker instance to allow communication on port 4444
+### (optional) edit your nginx docker instance to allow communication on port 6666 
+> Remember your front-service must be secure (HTTPS)
+> 
