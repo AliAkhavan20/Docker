@@ -52,8 +52,9 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - ./proxy/conf/nginx.conf:/etc/nginx/nginx.conf
-      - ./proxy/certs:/etc/nginx/certs
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl/site.crt:/etc/ssl/certs/site.crt
+      - ./ssl/site.dec.key:/etc/ssl/private/site.dec.key
 
   nopcom:
        depends_on:
@@ -95,7 +96,7 @@ http {
         ssl_certificate_key /etc/ssl/private/my-site.key;
 
         location / {
-            proxy_pass         http://web-api;
+            proxy_pass         http://{myLocalIp}:8081;
             proxy_redirect     off;
             proxy_http_version 1.1;
             proxy_cache_bypass $http_upgrade;
