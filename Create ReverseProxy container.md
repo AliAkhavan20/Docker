@@ -43,7 +43,6 @@ cd ..
 nano docker-compose.yml 
 ```
 ```
-  GNU nano 6.2                                                                                                  docker-compose.yml
 version: '3'
 
 services:
@@ -55,11 +54,11 @@ services:
     volumes:
       - ./proxy/conf/nginx.conf:/etc/nginx/nginx.conf
       - ./proxy/certs:/etc/nginx/certs
-    depends_on:
-      - nopcom
 
   nopcom:
-    image: nopweb
+       depends_on:
+         - proxy
+       image: nopweb
     container_name: nopcom
     ports:
       - "8082:80"
@@ -70,42 +69,52 @@ cd /proxy/conf/
 ```
 nano nginx.conf
 ```
+worker_processes 1;
+
+events { worker_connections 1024; }
+
 http {
+
+    sendfile on;
+    large_client_header_buffers 4 32k;
+
+    upstream web-api {
+        server api:5000;
+    }
+
     server {
         listen 80;
-        server_name repo.acctechco.com;
+        server_name my-site;
 
         location / {
-            proxy_pass http://localhost:8081;  # Adjust the port as needed
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
+            return 301 https://$host$request_uri;
         }
-
-        # Additional configurations (if needed)...
     }
 
     server {
         listen 443 ssl;
-        server_name repo.acctechco.com;
+        server_name my-site;
 
-        ssl_certificate /path/to/your/certificate.crt;
-        ssl_certificate_key /path/to/your/private.key;
-        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-        ssl_ciphers HIGH:!aNULL:!MD5;
+        ssl_certificate /etc/ssl/certs/my-site.crt;
+        ssl_certificate_key /etc/ssl/private/my-site.key;
 
         location / {
-            proxy_pass http://localhost:8081;  # Adjust the port as needed
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_pass         http://web-api;
+            proxy_redirect     off;
+            proxy_http_version 1.1;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header   Upgrade $http_upgrade;
+            proxy_set_header   Connection keep-alive;
+            proxy_set_header   Host $host;
+            proxy_set_header   X-Real-IP $remote_addr;
+            proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header   X-Forwarded-Proto $scheme;
+            proxy_set_header   X-Forwarded-Host $server_name;
+            proxy_buffer_size           128k;
+            proxy_buffers               4 256k;
+            proxy_busy_buffers_size     256k;
         }
-
-        # Additional SSL and proxy configurations...
     }
-}
 ```
 ### and at the end we call the docker-compose
 ```
