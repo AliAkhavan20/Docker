@@ -37,5 +37,15 @@ server {
 ```
 ### (optional) edit your nexus docker instance to allow communication on port 4444
 ### (optional) edit your nginx docker instance to allow communication on port 6666 
-> Remember your front-service must be secure (HTTPS)
-> 
+### Remember your front-service must be secure (HTTPS)
+### if you have a docker-compose file edit it and add ports to your containers like this
+```
+container_name: nexus
+ports:
+    - 6666:6666
+```
+```
+container_name: proxy
+ports:
+    - 8443:8443
+```
